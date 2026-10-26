@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import logo from "/home/acheuk/dztech-store/src/assets/djida-logo.png";
+import logo from "../assets/djida-logo.png";
 
 function Header() {
   const cartItems = useSelector((state) => state.cart.items);
