@@ -1,3 +1,9 @@
+import image0 from "../pictures/images.jpeg";
+import image1 from "../pictures/images1.jpeg";
+import image2 from "../pictures/images2.jpeg";
+import image3 from "../pictures/images3.jpeg";
+import image4 from "../pictures/images4.jpeg";
+import image5 from "../pictures/images5.jpeg";
 
 const products = [
   {
@@ -5,7 +11,7 @@ const products = [
     name: "Wireless Headphones",
     category: "Audio",
     price: 4500,
-    image: "./src/pictures/images.jpeg",
+    image: image0,
     description: "Comfortable wireless headphones for everyday use.",
   },
   {
@@ -13,7 +19,7 @@ const products = [
     name: "Smart Watch",
     category: "Accessories",
     price: 6500,
-    image: "./src/pictures/images1.jpeg",
+    image: image1,
     description: "A modern smartwatch for your daily activities.",
   },
   {
@@ -21,7 +27,7 @@ const products = [
     name: "Gaming Mouse",
     category: "Gaming",
     price: 2500,
-    image: "./src/pictures/images2.jpeg",
+    image: image2,
     description: "A precise mouse designed for gaming.",
   },
   {
@@ -29,7 +35,7 @@ const products = [
     name: "Bluetooth Speaker",
     category: "Audio",
     price: 3500,
-    image: "./src/pictures/images3.jpeg",
+    image: image3,
     description: "Enjoy your favorite music anywhere.",
   },
   {
@@ -37,7 +43,7 @@ const products = [
     name: "Mechanical Keyboard",
     category: "Gaming",
     price: 5500,
-    image: "./src/pictures/images4.jpeg",
+    image: image4,
     description: "A responsive keyboard for work and gaming.",
   },
   {
@@ -45,7 +51,7 @@ const products = [
     name: "USB-C Charger",
     category: "Accessories",
     price: 1800,
-    image: "./src/pictures/images5.jpeg",
+    image: image5,
     description: "A compact charger for compatible devices.",
   },
 ];
