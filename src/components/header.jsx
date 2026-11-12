@@ -1,7 +1,8 @@
+
 import { useSelector } from "react-redux";
 import logo from "../assets/djida-logo.png";
 
-function Header() {
+function Header({ user, onAccountClick }) {
   const cartItems = useSelector((state) => state.cart.items);
 
   const cartCount = cartItems.reduce(
@@ -21,9 +22,18 @@ function Header() {
 
       <nav className="main-nav">
         <a href="#products">Products</a>
+
         <a href="#cart" className="cart-link">
-          Cart({cartCount}) 
+          Cart({cartCount})
         </a>
+
+        <button
+          type="button"
+          className="account-button"
+          onClick={onAccountClick}
+        >
+          {user ? "My Account" : "Login / Register"}
+        </button>
       </nav>
     </header>
   );

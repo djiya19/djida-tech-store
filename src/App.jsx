@@ -1,8 +1,8 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/header";
 import ProductList from "./components/ProductList";
 import Cart from "./components/Cart";
+import Auth from "./components/Auth";
 
 const categories = [
   { icon: "💻", name: "Ordinateurs" },
@@ -15,11 +15,34 @@ const categories = [
 
 function App() {
   const [search, setSearch] = useState("");
+   const [user, setUser] = useState(() =>
+  JSON.parse(localStorage.getItem("user") || "null")
+);
+
+const [authOpen, setAuthOpen] = useState(false);
+
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.has("auth")) {
+    setAuthOpen(true);
+  }
+}, []);
 
   return (
     <>
-      <Header />
+      <Header
+  user={user}
+  onAccountClick={() => setAuthOpen(true)}
+/>
 
+{authOpen && (
+  <Auth
+    user={user}
+    onClose={() => setAuthOpen(false)}
+    onAuthChange={setUser}
+  />
+)}
       <main className="container">
         <section className="hero">
           <div className="hero-content">

@@ -1,75 +1,300 @@
-# Djida Tech Store 
+# Djida Tech Store
 
-A modern, responsive e-commerce storefront built with **React**, **Vite**, and **Redux Toolkit**. Djida Tech Store provides a clean shopping interface with a warm, elegant visual identity.
+Djida Tech Store is a full-stack e-commerce web application developed as an academic project. It provides a responsive shopping interface and a REST API for managing products and user authentication.
+
+The application uses React for the frontend and Node.js, Express.js, and MongoDB for the backend.
 
 ## Features
 
-- **Product catalog** — Display products in an organized storefront.
-- **Shopping cart** — Manage cart state using Redux Toolkit.
-- **Product search** — Find products through the search interface, if enabled in the current implementation.
-- **Responsive design** — A layout designed to adapt to different screen sizes.
-- **Custom branding** — A dedicated Djida Tech Store logo and visual identity.
-- **Modern frontend tooling** — Fast development and build workflows powered by Vite.
+### Frontend
+- **Product catalog** — Display products retrieved from the backend.
+- **Shopping cart** — Manage cart items using Redux Toolkit.
+- **Product search** — Search for products.
+- **User authentication** — Register, log in, and log out.
+- **Google login** — Authenticate using a Google account.
+- **Responsive design** — Interface adapted to different screen sizes.
+- **Custom branding** — Dedicated Djida Tech Store logo and visual identity.
+
+### Backend
+- **REST API** — Manage products through HTTP endpoints.
+- **MongoDB integration** — Store products and user accounts.
+- **User registration and login** — Authenticate users using email and password.
+- **Password security** — Hash passwords using bcrypt.
+- **JWT authentication** — Protect product creation, update, and deletion.
+- **Google OAuth2 / OpenID Connect** — Support authentication through Google.
+- **Rate limiting** — Limit general API requests and login attempts.
+- **Input validation and error handling** — Handle invalid data, duplicate accounts, and unauthorized requests.
 
 ## Technologies
 
-- [React](https://react.dev/) — Component-based user interface.
-- [Vite](https://vite.dev/) — Frontend development server and build tool.
-- [Redux Toolkit](https://redux-toolkit.js.org/) — Application state management.
+### Frontend
+- React
+- Vite
+- Redux Toolkit
 - JavaScript (ES6+)
-- CSS3
-- npm — Package management.
+- HTML5 and CSS3
 
-## Preview
+### Backend
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- JSON Web Tokens (JWT)
+- bcryptjs
+- Google OAuth2 / OpenID Connect
+- express-session
+- express-rate-limit
+- CORS
 
-Run the project locally to explore the storefront and its current features.
+## Project Structure
 
-<!-- Add a screenshot here when one is available.
-Example:
-![Djida Tech Store preview](./screenshots/store-preview.png)
--->
+```text
+djida-tech-store/
+│
+├── backend/
+│   ├── config/
+│   │   ├── db.js
+│   │   └── googleOAuth.js
+│   ├── controllers/
+│   │   └── authController.js
+│   ├── middleware/
+│   │   ├── authMiddleware.js
+│   │   └── rateLimiters.js
+│   ├── models/
+│   │   ├── Product.js
+│   │   └── User.js
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   └── productRoutes.js
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── package.json
+│   └── server.js
+│
+├── public/
+│   └── images/
+│
+├── src/
+│   ├── app/
+│   ├── assets/
+│   ├── components/
+│   ├── data/
+│   ├── features/
+│   ├── services/
+│   ├── App.jsx
+│   ├── App.css
+│   └── index.css
+│
+├── index.html
+├── package.json
+├── vite.config.js
+└── README.md
+```
 
-##  Getting Started
+## Database Models
+
+### Product
+
+The Product model contains:
+
+| Field | Type | Description |
+|---|---|---|
+| name | String | Product name |
+| description | String | Product description |
+| price | Number | Product price |
+| category | String | Product category |
+| imageUrl | String | Product image path or URL |
+| stock | Number | Available quantity |
+| timestamps | Date | Creation and update dates |
+
+### User
+
+The User model contains:
+
+| Field | Type | Description |
+|---|---|---|
+| name | String | User name |
+| email | String | Unique email address |
+| password | String | Hashed password (optional for Google users) |
+| googleId | String | Google account identifier |
+| timestamps | Date | Creation and update dates |
+
+## API Documentation
+
+The backend runs by default at:
+
+`http://localhost:3000`
+
+All API endpoints are prefixed with `/api`.
+
+### Authentication Endpoints
+
+| Method | Endpoint | Description | Authentication |
+|---|---|---|---|
+| POST | `/api/auth/register` | Register a new user | Public |
+| POST | `/api/auth/login` | Log in with email and password | Public |
+| GET | `/api/auth/google` | Start Google authentication | Public |
+| GET | `/api/auth/google/callback` | Handle Google callback | Public |
+| GET | `/api/auth/google/session` | Retrieve Google login session | Session |
+
+### Product Endpoints
+
+| Method | Endpoint | Description | Authentication |
+|---|---|---|---|
+| GET | `/api/products` | Retrieve all products | Public |
+| GET | `/api/products/:id` | Retrieve a product by ID | Public |
+| POST | `/api/products` | Create a product | JWT required |
+| PUT | `/api/products/:id` | Update a product | JWT required |
+| DELETE | `/api/products/:id` | Delete a product | JWT required |
+
+### JWT Authentication
+
+After a successful email/password login, the server returns a JSON Web Token.
+
+Protected requests must include the token in the HTTP Authorization header:
+
+```http
+Authorization: Bearer YOUR_JWT_TOKEN
+```
+
+The authentication middleware verifies the token before allowing access to protected product operations.
+
+### Rate Limiting
+
+The application implements two rate-limiting configurations:
+
+- **General API limiter:** 100 requests per 15 minutes.
+- **Login limiter:** 5 login attempts per 15 minutes per IP address.
+
+When the limit is exceeded, the API returns:
+
+`429 Too Many Requests`
+
+## Installation and Configuration
 
 ### Prerequisites
 
-Make sure you have installed:
+Install the following tools:
 
-- [Node.js](https://nodejs.org/) — preferably a current LTS version.
-- npm, which is included with Node.js.
-- Git.
+- Node.js and npm
+- Git
+- MongoDB Atlas account
+- Google Cloud project and OAuth credentials (for Google login)
 
-### Installation
+### 1. Clone the Repository
 
-1. Clone the repository:
+```bash
+git clone https://github.com/djiya19/djida-tech-store.git
+cd djida-tech-store
+```
 
-   ```bash
-   git clone git@github.com:djiya19/djida-tech-store.git
-   ```
+### 2. Install Frontend Dependencies
 
-2. Navigate to the project directory:
+From the project root:
 
-   ```bash
-   cd djida-tech-store
-   ```
+```bash
+npm install
+```
 
-3. Install the dependencies:
+### 3. Install Backend Dependencies
 
-   ```bash
-   npm install
-   ```
+```bash
+cd backend
+npm install
+```
 
-4. Start the development server:
+### 4. Configure Environment Variables
 
-   ```bash
-   npm run dev
-   ```
+Create a `.env` file inside the `backend/` directory using `.env.example` as a template.
 
-5. Open the local URL displayed in your terminal, usually `http://localhost:5173`.
+```env
+PORT=3000
+
+MONGO_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_jwt_secret
+
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CALLBACK_URL=http://localhost:3000/api/auth/google/callback
+
+OAUTH_SESSION_SECRET=your_oauth_session_secret
+```
+
+Replace the placeholder values with your own configuration.
+
+**Important:** Never commit your `.env` file or expose your database credentials, OAuth client secret, or JWT secret.
+
+### 5. Configure Google OAuth
+
+In Google Cloud Console, configure an OAuth 2.0 Web Client.
+
+For local development, use:
+
+**Authorized JavaScript origin:**
+
+```text
+http://localhost:5173
+```
+
+**Authorized redirect URI:**
+
+```text
+http://localhost:3000/api/auth/google/callback
+```
+
+The redirect URI must match the value configured in the backend environment variables.
+
+### 6. Start the Backend
+
+From the `backend/` directory:
+
+```bash
+npm run dev
+```
+
+The API should be available at:
+
+```text
+http://localhost:3000
+```
+
+### 7. Start the Frontend
+
+Open another terminal, return to the project root, and run:
+
+```bash
+cd ~/dztech-store
+npm run dev
+```
+
+Open the local URL displayed by Vite, usually:
+
+```text
+http://localhost:5173
+```
+
+## API Testing
+
+API endpoints were tested using Thunder Client.
+
+The tests cover:
+
+- Successful user registration.
+- Duplicate registration.
+- Successful login.
+- Invalid login credentials.
+- Public product retrieval.
+- Product creation with a valid JWT.
+- Product update with a valid JWT.
+- Product deletion with a valid JWT.
+- Protected route access without a token.
+- Protected route access with an invalid token.
+- Login rate limiting and HTTP 429 responses.
 
 ## Build for Production
 
-To create an optimized production build, run:
+To create an optimized frontend build:
 
 ```bash
 npm run build
@@ -81,50 +306,19 @@ To preview the production build locally:
 npm run preview
 ```
 
-## Project Structure
-
-```text
-dztech-store/
-├── public/                 # Public static assets
-├── src/
-│   ├── app/
-│   │   └── store.js        # Redux store configuration
-│   ├── assets/             # Logo and visual assets
-│   ├── components/         # Reusable UI components
-│   ├── data/               # Product data
-│   ├── features/
-│   │   └── cart/            # Cart state and Redux logic
-│   ├── pictures/           # Product images
-│   ├── App.jsx             # Main application component
-│   ├── App.css             # Application styles
-│   ├── index.css           # Global styles
-│   └── main.jsx            # Application entry point
-├── index.html
-├── package.json
-└── vite.config.js
-```
-
 ## Design
 
-Djida Tech Store uses a warm, understated visual style with cream backgrounds, sand-colored accents, and terracotta details. The goal is to create a friendly, readable, and welcoming shopping experience.
-
-##  Future Improvements
-
-Potential enhancements include:
-
-- Product category filtering and sorting.
-- Improved product search and cart interactions.
-- Product detail pages.
-- Persistent cart storage.
-- Checkout and payment integration.
-- Deployment to a public hosting platform.
+Djida Tech Store uses a warm and understated visual identity, with cream backgrounds, soft earth tones, and terracotta accents. The interface aims to provide a friendly, readable, and welcoming shopping experience.
 
 ## Author
 
 **Djida Acheuk**
 
+Engineering Student — CyberSecurity
+ENSTA
+
 GitHub: [@djiya19](https://github.com/djiya19)
 
 ## License
 
-No license has been specified yet. All rights are reserved unless a license is added to this repository.
+No license has been specified. All rights are reserved unless a license is added to this repository.
