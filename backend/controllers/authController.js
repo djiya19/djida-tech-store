@@ -182,7 +182,10 @@ const googleCallback = async (req, res) => {
   try {
     const { code, state, error: oauthError } = req.query;
 
-    const frontendURL = "http://localhost:5173/djida-tech-store/";
+   const frontendURL =
+  process.env.NODE_ENV === "production"
+    ? "https://djiya19.github.io/djida-tech-store/"
+    : "http://localhost:5173/djida-tech-store/";
 
     if (oauthError) {
       return res.redirect(`${frontendURL}?auth=error`);
@@ -290,9 +293,7 @@ const googleCallback = async (req, res) => {
   } catch (error) {
     console.error("Google callback error:", error.message);
 
-    return res.redirect(
-      "http://localhost:5173/djida-tech-store/?auth=error"
-    );
+    return res.redirect(`${frontendURL}?auth=error`);
   }
 };
 
