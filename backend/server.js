@@ -1,25 +1,38 @@
+
 require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const session = require("express-session");
+
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
 const { generalLimiter, loginLimiter } = require("./middleware/rateLimiters");
-const session = require("express-session");
-
 const connectDB = require("./config/db");
 
 const app = express();
 
-// Middleware
+const isProduction = process.env.NODE_ENV === "production";
+
+// Trust Render's reverse proxy for secure cookies
+if (isProduction) {
+  app.set("trust proxy", 1);
+}
+
+// CORS configuration
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://djiya19.github.io"
+    ],
     credentials: true
   })
 );
+
 app.use(express.json());
 
+// Session configuration
 app.use(
   session({
     name: "djida.sid",
@@ -28,24 +41,18 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 10 * 60 * 1000
     }
   })
 );
 
-// Rate limiting
+// Rate limiting (register only once)
 app.use("/api", generalLimiter);
 app.use("/api/auth/login", loginLimiter);
 
-// Routes
-app.use("/api/products", productRoutes);
-app.use("/api/auth", authRoutes);
-
-// Apply general rate limiting to all API routes
-app.use("/api", generalLimiter);
-app.use("/api/auth/login", loginLimiter);
+// API routes (register only once)
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 
@@ -59,10 +66,10 @@ app.get("/", (req, res) => {
   });
 });
 
-// Server port
+// Start server
 const PORT = process.env.PORT || 3000;
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
