@@ -41,7 +41,7 @@ function Auth({ user, onClose, onAuthChange }) {
     const completeGoogleLogin = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/auth/google/session",
+          "https://djida-tech-store-api.onrender.com/api/auth/google/session",
           {
             method: "GET",
             credentials: "include",
@@ -209,7 +209,7 @@ function Auth({ user, onClose, onAuthChange }) {
               className="google-button"
               onClick={() => {
                 window.location.href =
-                  "http://localhost:3000/api/auth/google";
+                  "https://djida-tech-store-api.onrender.com/api/auth/google";
               }}
             >
               Continue with Google
